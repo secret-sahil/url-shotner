@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from 'src/env.validation';
 import { CertificateMailHandler } from './handlers/certificate.handler';
 
-@Processor('mail', { concurrency: 5 })
+@Processor('mail', { limiter: { max: 13, duration: 1000 } }) // Limit to 13 jobs per second to stay within AWS SES limits
 export class MailProcessor extends WorkerHost {
   private router: MailJobRouter;
 
