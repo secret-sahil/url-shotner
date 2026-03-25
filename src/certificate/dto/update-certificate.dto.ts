@@ -1,4 +1,33 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCertificateDto } from './create-certificate.dto';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
-export class UpdateCertificateDto extends PartialType(CreateCertificateDto) {}
+export class UpdateCertificateDto {
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  course?: string;
+
+  @IsOptional()
+  @IsString()
+  template?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isSent?: boolean;
+
+  @IsOptional()
+  @IsDateString()
+  issuedAt?: string;
+}
