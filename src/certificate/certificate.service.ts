@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
@@ -10,6 +10,7 @@ import {
   type RGB,
 } from 'pdf-lib/cjs';
 import fontkit from '@pdf-lib/fontkit';
+import QRCode from 'qrcode';
 import { CreateCertificateDto } from './dto/create-certificate.dto';
 import { UpdateCertificateDto } from './dto/update-certificate.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -35,6 +36,10 @@ export class CertificateService {
     'public',
     'generated_certificates',
   );
+
+  private getVerificationUrl(certificateId: string) {
+    return `https://certify.hopingminds.com/certificate/${certificateId}`;
+  }
 
   private async generateCertificatePdf(options: {
     name: string;
@@ -160,7 +165,55 @@ export class CertificateService {
       color: rgb(0.35, 0.35, 0.35),
     });
 
+    const qrCodeDataUrl = await QRCode.toDataURL(
+      this.getVerificationUrl(options.certificateId),
+      {
+        margin: 1,
+        width: 300,
+      },
+    );
+
+    const qrCodeImageBytes = Buffer.from(
+      qrCodeDataUrl.split(',')[1] ?? '',
+      'base64',
+    );
+    const qrImage = await pdfDoc.embedPng(qrCodeImageBytes);
+
+    const qrSize = 72;
+    firstPage.drawImage(qrImage, {
+      x: (width - qrSize - 24) * 0.045,
+      y: (height - qrSize - 24) * 0.98,
+      width: qrSize,
+      height: qrSize,
+    });
+
     return Buffer.from(await pdfDoc.save());
+  }
+
+  async getCertificatePdfByCertificateId(certificateId: string) {
+    const certificate = await this.prisma.certificate.findUnique({
+      where: { certificateId },
+    });
+
+    if (!certificate) {
+      throw new NotFoundException(
+        `Certificate not found for certificateId: ${certificateId}`,
+      );
+    }
+
+    const pdfBuffer = await this.generateCertificatePdf({
+      name: certificate.name,
+      course: certificate.course,
+      issuedAt: certificate.issuedAt.toISOString().slice(0, 10),
+      certificateId: certificate.certificateId,
+      templateFile: certificate.template,
+    });
+
+    return {
+      certificate,
+      fileName: `${certificate.certificateId}.pdf`,
+      pdfBuffer,
+    };
   }
 
   async getUniqueCertificateId(): Promise<string> {
