@@ -140,16 +140,16 @@ export class CertificateService {
       });
     };
 
-    const headingColor = rgb(0.14, 0.2, 0.3);
+    // const headingColor = rgb(0.14, 0.2, 0.3);
     const bodyColor = rgb(0.1, 0.1, 0.1);
 
     drawCenteredText({
       page: firstPage,
       text: options.name,
-      y: height * 0.6,
-      size: 36,
+      y: height * 0.59,
+      size: 38,
       font: headingFont,
-      color: headingColor,
+      color: bodyColor,
     });
 
     drawCenteredText({
