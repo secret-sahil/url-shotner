@@ -222,6 +222,7 @@ export type CertificateOrderByWithRelationInput = {
 export type CertificateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   certificateId?: string
+  email_course_template?: Prisma.CertificateEmailCourseTemplateCompoundUniqueInput
   AND?: Prisma.CertificateWhereInput | Prisma.CertificateWhereInput[]
   OR?: Prisma.CertificateWhereInput[]
   NOT?: Prisma.CertificateWhereInput | Prisma.CertificateWhereInput[]
@@ -231,7 +232,7 @@ export type CertificateWhereUniqueInput = Prisma.AtLeast<{
   template?: Prisma.StringFilter<"Certificate"> | string
   isSent?: Prisma.BoolFilter<"Certificate"> | boolean
   issuedAt?: Prisma.DateTimeFilter<"Certificate"> | Date | string
-}, "id" | "certificateId">
+}, "id" | "certificateId" | "email_course_template">
 
 export type CertificateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -336,6 +337,12 @@ export type CertificateUncheckedUpdateManyInput = {
   template?: Prisma.StringFieldUpdateOperationsInput | string
   isSent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   issuedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CertificateEmailCourseTemplateCompoundUniqueInput = {
+  email: string
+  course: string
+  template: string
 }
 
 export type CertificateCountOrderByAggregateInput = {
