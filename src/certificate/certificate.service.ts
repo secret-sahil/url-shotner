@@ -273,7 +273,7 @@ export class CertificateService {
       const issuedAt = cert.issuedAt ? new Date(cert.issuedAt) : new Date();
 
       const pdfBuffer = await this.generateCertificatePdf({
-        name: cert.email,
+        name: cert.name,
         course: cert.course,
         issuedAt: issuedAt.toISOString().slice(0, 10),
         certificateId,

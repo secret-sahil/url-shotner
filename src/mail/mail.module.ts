@@ -13,10 +13,10 @@ import { MailProcessor } from './mail.processor';
         defaultJobOptions: {
           attempts: config.get<number>('MAIL_JOB_ATTEMPTS', 5),
           backoff: {
-            type: 'exponential',
+            type: 'fixed',
             delay: config.get<number>('MAIL_JOB_BACKOFF', 3000),
           },
-          removeOnComplete: true,
+          removeOnComplete: false,
           removeOnFail: false,
         },
       }),
