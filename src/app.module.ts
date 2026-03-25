@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { ShortModule } from './short/short.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvironmentVariables, validate } from './env.validation';
 import { BullModule } from '@nestjs/bullmq';
@@ -22,7 +21,6 @@ import { BullModule } from '@nestjs/bullmq';
       }),
     }),
     PrismaModule,
-    ShortModule,
   ],
   controllers: [AppController],
   providers: [AppService],
