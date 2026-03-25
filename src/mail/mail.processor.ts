@@ -9,7 +9,7 @@ import { CertificateMailHandler } from './handlers/certificate.handler';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CertificateJobData } from './types/certificate';
 
-@Processor('mail', { limiter: { max: 13, duration: 1000 } }) // Limit to 13 jobs per second to stay within AWS SES limits
+@Processor('mail', { concurrency: 13, limiter: { max: 13, duration: 1000 } }) // Limit to 13 jobs per second to stay within AWS SES limits
 export class MailProcessor extends WorkerHost {
   private router: MailJobRouter;
 
