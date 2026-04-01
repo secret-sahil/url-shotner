@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Certificate` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "Certificate";
-
 -- CreateTable
 CREATE TABLE "certificates" (
     "id" TEXT NOT NULL,
@@ -15,6 +6,7 @@ CREATE TABLE "certificates" (
     "name" TEXT NOT NULL,
     "course" TEXT NOT NULL,
     "template" TEXT NOT NULL,
+    "grades" TEXT,
     "isSent" BOOLEAN NOT NULL DEFAULT false,
     "issuedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
