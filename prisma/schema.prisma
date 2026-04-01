@@ -15,6 +15,7 @@ model Certificate {
   name          String
   course        String
   template      String
+  grades        String?
   isSent        Boolean  @default(false)
   issuedAt      DateTime @default(now())
 

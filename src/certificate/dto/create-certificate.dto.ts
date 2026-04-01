@@ -28,6 +28,10 @@ class CertificateDto {
   @IsOptional()
   @IsDateString()
   issuedAt?: string;
+
+  @IsOptional()
+  @IsString()
+  grades?: string;
 }
 
 export class CreateCertificateDto {

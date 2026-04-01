@@ -62,6 +62,7 @@ export class CertificateService {
     issuedAt: string;
     certificateId: string;
     templateFile: string;
+    grades?: string | null;
   }) {
     const templatePath = join(this.templatesDir, options.templateFile);
 
@@ -143,42 +144,93 @@ export class CertificateService {
     // const headingColor = rgb(0.14, 0.2, 0.3);
     const bodyColor = rgb(0.1, 0.1, 0.1);
 
-    drawCenteredText({
-      page: firstPage,
-      text: options.name,
-      y: height * 0.59,
-      size: 38,
-      font: headingFont,
-      color: bodyColor,
-    });
+    if (options.templateFile.toLowerCase().includes('sawayam')) {
+      drawCenteredText({
+        page: firstPage,
+        text: options.name,
+        y: height * 0.59,
+        size: 38,
+        font: headingFont,
+        color: bodyColor,
+      });
 
-    drawCenteredText({
-      page: firstPage,
-      text: options.course,
-      y: height * 0.44,
-      size: 18,
-      font: bodyFont,
-      color: bodyColor,
-    });
+      drawCenteredText({
+        page: firstPage,
+        text: options.course,
+        y: height * 0.44,
+        size: 18,
+        font: bodyFont,
+        color: bodyColor,
+      });
 
-    drawText({
-      page: firstPage,
-      text: options.issuedAt,
-      x: width * 0.146,
-      y: height * 0.17,
-      size: 14,
-      font: bodyFont,
-      color: bodyColor,
-    });
+      drawText({
+        page: firstPage,
+        text: options.issuedAt,
+        x: width * 0.146,
+        y: height * 0.17,
+        size: 14,
+        font: bodyFont,
+        color: bodyColor,
+      });
 
-    drawCenteredText({
-      page: firstPage,
-      text: `Certificate ID: ${options.certificateId}`,
-      y: height * 0.01,
-      size: 12,
-      font: bodyFont,
-      color: rgb(0.35, 0.35, 0.35),
-    });
+      drawCenteredText({
+        page: firstPage,
+        text: `Certificate ID: ${options.certificateId}`,
+        y: height * 0.01,
+        size: 12,
+        font: bodyFont,
+        color: rgb(0.35, 0.35, 0.35),
+      });
+    } else if (options.templateFile.toLocaleLowerCase().includes('anna')) {
+      drawCenteredText({
+        page: firstPage,
+        text: options.name,
+        y: height * 0.635,
+        size: 38,
+        font: headingFont,
+        color: bodyColor,
+      });
+
+      drawCenteredText({
+        page: firstPage,
+        text: options.course,
+        y: height * 0.422,
+        size: 18,
+        font: bodyFont,
+        color: bodyColor,
+      });
+
+      drawText({
+        page: firstPage,
+        text: options.issuedAt,
+        x: width * 0.146,
+        y: height * 0.17,
+        size: 14,
+        font: bodyFont,
+        color: bodyColor,
+      });
+
+      if (options.grades) {
+        drawText({
+          page: firstPage,
+          text: options.grades,
+          x: width * 0.285,
+          y: height * 0.17,
+          size: 14,
+          font: bodyFont,
+          color: bodyColor,
+        });
+      }
+
+      drawCenteredText({
+        page: firstPage,
+        text: `Certificate ID: ${options.certificateId}`,
+        y: height * 0.01,
+        size: 12,
+        font: bodyFont,
+        color: rgb(0.35, 0.35, 0.35),
+      });
+    }
 
     const qrCodeDataUrl = await QRCode.toDataURL(
       this.getVerificationUrl(options.certificateId),
@@ -222,6 +274,7 @@ export class CertificateService {
       issuedAt: certificate.issuedAt.toISOString().slice(0, 10),
       certificateId: certificate.certificateId,
       templateFile: certificate.template,
+      grades: certificate.grades,
     });
 
     return {
@@ -278,6 +331,7 @@ export class CertificateService {
         issuedAt: issuedAt.toISOString().slice(0, 10),
         certificateId,
         templateFile: template,
+        grades: cert.grades,
       });
 
       const certificateFileName = `${certificateId}.pdf`;
@@ -288,16 +342,17 @@ export class CertificateService {
       await writeFile(certificatePdfPath, pdfBuffer);
 
       try {
-        await this.prisma.certificate.create({
-          data: {
-            certificateId,
-            email: cert.email,
-            name: cert.name,
-            course: cert.course,
-            template,
-            issuedAt,
-          },
-        });
+        // await this.prisma.certificate.create({
+        //   data: {
+        //     certificateId,
+        //     email: cert.email,
+        //     name: cert.name,
+        //     course: cert.course,
+        //  grades: cert.grades,
+        //     template,
+        //     issuedAt,
+        //   },
+        // });
       } catch (error) {
         if (this.isUniqueConstraintError(error)) {
           try {
@@ -320,12 +375,12 @@ export class CertificateService {
         throw error;
       }
 
-      await this.mailService.sendCertificateEmail({
-        certificateId,
-        name: cert.name,
-        email: cert.email,
-        certificatePdfPath,
-      });
+      // await this.mailService.sendCertificateEmail({
+      //   certificateId,
+      //   name: cert.name,
+      //   email: cert.email,
+      //   certificatePdfPath,
+      // });
 
       results.push({
         certificateId,
