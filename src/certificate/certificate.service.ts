@@ -324,23 +324,23 @@ export class CertificateService {
     for (const cert of createCertificateDto.certificates) {
       const certificateId = await this.getUniqueCertificateId();
       const issuedAt = cert.issuedAt ? new Date(cert.issuedAt) : new Date();
-
-      const pdfBuffer = await this.generateCertificatePdf({
-        name: cert.name,
-        course: cert.course,
-        issuedAt: issuedAt.toISOString().slice(0, 10),
-        certificateId,
-        templateFile: template,
-        grades: cert.grades,
-      });
-
       const certificateFileName = `${certificateId}.pdf`;
       const certificatePdfPath = join(
         this.generatedCertificatesDir,
         certificateFileName,
       );
-      await writeFile(certificatePdfPath, pdfBuffer);
 
+      if (!createCertificateDto.sendOnlyEmail) {
+        const pdfBuffer = await this.generateCertificatePdf({
+          name: cert.name,
+          course: cert.course,
+          issuedAt: issuedAt.toISOString().slice(0, 10),
+          certificateId,
+          templateFile: template,
+          grades: cert.grades,
+        });
+        await writeFile(certificatePdfPath, pdfBuffer);
+      }
       try {
         // await this.prisma.certificate.create({
         //   data: {
@@ -375,12 +375,15 @@ export class CertificateService {
         throw error;
       }
 
-      // await this.mailService.sendCertificateEmail({
-      //   certificateId,
-      //   name: cert.name,
-      //   email: cert.email,
-      //   certificatePdfPath,
-      // });
+      await this.mailService.sendCertificateEmail({
+        certificateId,
+        name: cert.name,
+        email: cert.email,
+        certificateDownloadUrl: this.getVerificationUrl(certificateId),
+        certificatePdfPath: createCertificateDto.sendOnlyEmail
+          ? null
+          : certificatePdfPath,
+      });
 
       results.push({
         certificateId,

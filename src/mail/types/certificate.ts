@@ -2,5 +2,6 @@ export type CertificateJobData = {
   certificateId: string;
   name: string;
   email: string;
-  certificatePdfPath: string;
+  certificateDownloadUrl: string;
+  certificatePdfPath?: string | null;
 };

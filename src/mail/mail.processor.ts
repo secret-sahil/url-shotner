@@ -60,7 +60,9 @@ export class MailProcessor extends WorkerHost {
     });
 
     try {
-      await unlink(job.data.certificatePdfPath);
+      if (job.data.certificatePdfPath) {
+        await unlink(job.data.certificatePdfPath);
+      }
     } catch {
       // Ignore missing-file deletion errors; the email has already been sent.
     }

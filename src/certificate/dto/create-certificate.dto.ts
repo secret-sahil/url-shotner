@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEmail,
   IsOptional,
@@ -37,6 +38,12 @@ class CertificateDto {
 export class CreateCertificateDto {
   @IsString()
   template: string;
+
+  @IsBoolean()
+  sendEmail: boolean;
+
+  @IsBoolean()
+  sendOnlyEmail: boolean;
 
   @IsArray()
   @ValidateNested({ each: true })
