@@ -3,6 +3,7 @@ import {
   IsBoolean,
   IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   ValidateNested,
@@ -11,7 +12,14 @@ import { Type } from 'class-transformer';
 import { Capitalise, Lowercase, Trim } from 'src/common/decorators';
 
 class CertificateDto {
-  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required' })
+  @IsEmail(
+    {},
+    {
+      message: ({ value }) =>
+        value ? `${value} is not a valid email address` : 'Email is invalid',
+    },
+  )
   @Trim()
   @Lowercase()
   email: string;
