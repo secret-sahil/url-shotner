@@ -40,6 +40,9 @@ export class EnvironmentVariables {
 
   @IsString()
   AWS_SECRET_ACCESS_KEY: string;
+
+  @IsString()
+  CERTIFICATE_PASSWORD: string;
 }
 
 export function validate(config: Record<string, unknown>) {

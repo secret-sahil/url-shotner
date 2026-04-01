@@ -19,12 +19,15 @@ import { CreateCertificateDto } from './dto/create-certificate.dto';
 import { UpdateCertificateDto } from './dto/update-certificate.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MailService } from 'src/mail/mail.service';
+import { EnvironmentVariables } from 'src/env.validation';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CertificateService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
+    readonly config: ConfigService<EnvironmentVariables, true>,
   ) {}
 
   private readonly templatesDir = resolve(
@@ -301,7 +304,9 @@ export class CertificateService {
   }
 
   async create(createCertificateDto: CreateCertificateDto) {
-    if (createCertificateDto.password !== 'Hoping@Minds#2024') {
+    if (
+      createCertificateDto.password !== this.config.get('CERTIFICATE_PASSWORD')
+    ) {
       throw new UnauthorizedException('Invalid password');
     }
 
