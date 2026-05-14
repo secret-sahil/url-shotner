@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Certificate Verification | Hoping Minds</title>
+  <meta name="description"
+    content="Verify a Hoping Minds certificate, preview the document, and share your achievement." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Certificate Verification" />
+  <meta property="og:description" content="Verify a Hoping Minds certificate and preview the document." />
+  <meta property="og:image" content="/certificate-verify/og-default.svg" />
+  <meta property="og:url" content="" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Certificate Verification" />
+  <meta name="twitter:description" content="Verify a Hoping Minds certificate and preview the document." />
+  <meta name="twitter:image" content="/certificate-verify/og-default.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/certificate-verify/styles.css" />
+</head>
+
+<body>
+  <div class="grain"></div>
+  <main class="page" data-issuer="Hoping Minds">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Certificate Verification</p>
+        <h1 class="title">Your achievement, verified.</h1>
+        <p class="subtitle">
+          Confirm authenticity, preview the certificate, and share it with the
+          world.
+        </p>
+      </div>
+      <div class="status" id="statusPill">Checking...</div>
+    </header>
+
+    <section class="grid">
+      <div class="card details">
+        <h2>Certificate details</h2>
+        <dl>
+          <div>
+            <dt>Certificate ID</dt>
+            <dd id="certificateId">--</dd>
+          </div>
+          <div>
+            <dt>Name</dt>
+            <dd id="certificateName">--</dd>
+          </div>
+          <div>
+            <dt>Course</dt>
+            <dd id="certificateCourse">--</dd>
+          </div>
+          <div>
+            <dt>Issued on</dt>
+            <dd id="certificateIssued">--</dd>
+          </div>
+          <div>
+            <dt>Grades</dt>
+            <dd id="certificateGrades">--</dd>
+          </div>
+        </dl>
+        <div class="actions">
+          <a class="button" id="downloadPdf" href="#" download>Download PDF</a>
+          <button class="button ghost" id="downloadPng" type="button">
+            Download PNG
+          </button>
+        </div>
+      </div>
+
+      <div class="card preview">
+        <div class="preview-header">
+          <h2>Certificate preview</h2>
+          <p id="previewHint">Rendering preview...</p>
+        </div>
+        <div class="preview-canvas">
+          <canvas id="previewCanvas"></canvas>
+          <img id="previewImage" alt="Certificate preview" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card share">
+      <div>
+        <h2>Share your certificate</h2>
+        <p>
+          Send a verified link or add the certificate directly to your
+          LinkedIn profile.
+        </p>
+      </div>
+      <div class="actions">
+        <button class="button" id="copyLink" type="button">Copy link</button>
+        <a class="button ghost" id="shareLinkedIn" href="#" target="_blank">
+          Share on LinkedIn
+        </a>
+        <a class="button ghost" id="addLinkedIn" href="#" target="_blank">
+          Add to LinkedIn profile
+        </a>
+      </div>
+    </section>
+
+    <section class="card error" id="invalidCard">
+      <h2>Certificate not found</h2>
+      <p>
+        We could not verify this certificate ID. Double-check the link or
+        contact Hoping Minds support.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.2.67/build/pdf.min.js"></script>
+  <script src="/certificate-verify/app.js"></script>
+</body>
+
+</html>

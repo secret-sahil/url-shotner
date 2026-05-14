@@ -291,6 +291,79 @@ export class CertificateService {
     };
   }
 
+  async getCertificatePublicDetailsByCertificateId(certificateId: string) {
+    return this.prisma.certificate.findUnique({
+      where: { certificateId },
+      select: {
+        certificateId: true,
+        name: true,
+        course: true,
+        template: true,
+        grades: true,
+        issuedAt: true,
+      },
+    });
+  }
+
+  async getCertificatePreviewPngByCertificateId(certificateId: string) {
+    const { pdfBuffer } =
+      await this.getCertificatePdfByCertificateId(certificateId);
+
+    const pdfjsLib =
+      (await import('pdfjs-dist/legacy/build/pdf.mjs')) as unknown as {
+        getDocument: (options: {
+          data: Uint8Array;
+          disableWorker: boolean;
+        }) => {
+          promise: Promise<{
+            getPage: (pageNumber: number) => Promise<{
+              getViewport: (options: { scale: number }) => {
+                width: number;
+                height: number;
+              };
+              render: (options: {
+                canvasContext: unknown;
+                viewport: { width: number; height: number };
+              }) => { promise: Promise<void> };
+            }>;
+          }>;
+        };
+      };
+
+    const canvasLib = (await import('@napi-rs/canvas')) as unknown as {
+      createCanvas: (
+        width: number,
+        height: number,
+      ) => {
+        getContext: (contextId: '2d') => unknown;
+        toBuffer: (mimeType: 'image/png') => Buffer;
+      };
+    };
+
+    const pdf = await pdfjsLib.getDocument({
+      data: new Uint8Array(pdfBuffer),
+      disableWorker: true,
+    }).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 1.4 });
+
+    const canvas = canvasLib.createCanvas(
+      Math.ceil(viewport.width),
+      Math.ceil(viewport.height),
+    );
+    const context = canvas.getContext('2d');
+
+    await page.render({
+      canvasContext: context,
+      viewport,
+    }).promise;
+
+    return {
+      pngBuffer: canvas.toBuffer('image/png'),
+      fileName: `${certificateId}.png`,
+    };
+  }
+
   async getUniqueCertificateId(): Promise<string> {
     // Generate a random alphanumeric string of length 5 and prefix it with "HM-"
     const id = `HM-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
