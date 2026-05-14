@@ -168,7 +168,7 @@ export class CertificateController {
       ? `https://www.linkedin.com/profile/add?${new URLSearchParams({
           startTask: 'CERTIFICATION_NAME',
           name: certificateCourse,
-          organizationName: 'Hoping Minds',
+          organizationName: 'HopingMinds',
           issueYear: issuedAt.split('-')[0] ?? '',
           issueMonth: issuedAt.split('-')[1] ?? '',
           certUrl: shareUrl,
@@ -358,7 +358,6 @@ export class CertificateController {
         background: #faf6f0;
         padding: 16px;
         border: 1px dashed rgba(0, 0, 0, 0.15);
-        min-height: 320px;
         display: grid;
         place-items: center;
       }
@@ -470,8 +469,7 @@ export class CertificateController {
           </p>
         </div>
         <div class="actions">
-          <a class="button" href="${escapeHtml(shareUrl)}" target="_blank">Copy link</a>
-          <a class="button ghost" href="${escapeHtml(
+          <a class="button" href="${escapeHtml(
             shareLinkedIn,
           )}" target="_blank">Share on LinkedIn</a>
           <a class="button ghost" href="${escapeHtml(

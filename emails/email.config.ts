@@ -2,10 +2,10 @@ export const EMAIL_BRAND = {
   appName: 'Hoping Minds',
   legalName: 'Katina Skills Private Limited',
   logoUrl: 'https://cdn.infutrix.com/email-hm/logo.png',
-  dashboardLink: 'https://bytelogsolutions.com/dashboard',
+  dashboardLink: 'https://hopingminds.com/dashboard',
   supportEmail: 'training@hopingminds.com',
   privacyPolicyLink: 'https://courses.hopingminds.com/privacypolicy',
-  unsubscribeLink: 'https://bytelogsolutions.com/unsubscribe',
+  unsubscribeLink: 'https://hopingminds.com/unsubscribe',
 
   socialLinks: [
     {
