@@ -203,8 +203,8 @@ export class CertificateController {
         --bg: #f6f1e9;
         --ink: #151515;
         --muted: #6a6a6a;
-        --accent: #e0564a;
-        --accent-deep: #a5322b;
+        --accent: #4aaee0;
+        --accent-deep: #2b64a5;
         --surface: #ffffff;
         --outline: rgba(0, 0, 0, 0.08);
         --shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
@@ -270,14 +270,14 @@ export class CertificateController {
       }
 
       .status.valid {
-        background: #e9f7ec;
-        color: #1d6b2c;
+        background: #1d6b2c;
+        color: #fff;
         border-color: rgba(29, 107, 44, 0.25);
       }
 
       .status.invalid {
-        background: #fdeaea;
-        color: #9e2d2d;
+        background: #9e2d2d;
+        color: #fff;
         border-color: rgba(158, 45, 45, 0.25);
       }
 
@@ -338,13 +338,13 @@ export class CertificateController {
 
       .button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 12px 20px rgba(224, 86, 74, 0.25);
+        box-shadow: 0 12px 20px rgba(74, 166, 224, 0.25);
       }
 
       .button.ghost {
         background: transparent;
         color: var(--accent-deep);
-        border: 1px solid rgba(165, 50, 43, 0.3);
+        border: 1px solid rgba(74, 166, 224, 0.51);
       }
 
       .preview {
@@ -396,6 +396,9 @@ export class CertificateController {
   </head>
   <body>
     <main class="page">
+      ${
+        options.isValid
+          ? `
       <header class="hero">
         <div>
           <p class="eyebrow">Certificate Verification</p>
@@ -436,17 +439,13 @@ export class CertificateController {
           <div class="actions">
             <a class="button" href="${escapeHtml(
               `${shareUrl}/pdf`,
-            )}" download>Download PDF</a>
-            <a class="button ghost" href="${escapeHtml(
-              options.previewUrl,
-            )}" download>Download PNG</a>
+            )}" download>Download Certificate</a>
           </div>
         </div>
 
         <div class="card preview">
           <div>
             <h2>Certificate preview</h2>
-            <p>${options.isValid ? 'Preview generated from the certificate.' : 'Preview unavailable.'}</p>
           </div>
           <div class="preview-frame">
             ${
@@ -477,10 +476,7 @@ export class CertificateController {
           )}" target="_blank">Add to LinkedIn profile</a>
         </div>
       </section>
-
-      ${
-        options.isValid
-          ? ''
+          `
           : `<section class="card error">
         <h2>Certificate not found</h2>
         <p>
